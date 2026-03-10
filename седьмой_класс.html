@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7 класс - Physica PRO</title>
+    <link rel="stylesheet" href="оформление.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <script>
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    </script>
+</head>
+<body class="class-7-page">
+
+    <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Сменить тему"></button>
+
+    <header>
+        <h1>7 класс: Механика</h1>
+        <p>Базовые формулы и понятия</p>
+    </header>
+
+    <nav>
+        <a href="главная_страница.html">🏠 На главную</a>
+        <a href="восьмой_класс.html">8 класс →</a>
+    </nav>
+
+    <div class="container">
+        <div class="search-container">
+            <input type="text" id="formulaSearch" placeholder="Поиск по 7 классу..." autocomplete="off">
+        </div>
+
+        <div class="grid" id="cardsContainer">
+            <details data-name="скорость движения">
+                <summary>Скорость движения</summary>
+                <div class="content">
+                    <div class="math">$$v = \frac{s}{t}$$</div>
+                    <p><b>s</b> — пройденный путь, <b>t</b> — время.</p>
+                </div>
+            </details>
+
+            <details data-name="плотность вещества">
+                <summary>Плотность вещества</summary>
+                <div class="content">
+                    <div class="math">$$\rho = \frac{m}{V}$$</div>
+                    <p><b>m</b> — масса, <b>V</b> — объем.</p>
+                </div>
+            </details>
+
+            <details data-name="давление твердых тел">
+                <summary>Давление твердых тел</summary>
+                <div class="content">
+                    <div class="math">$$p = \frac{F}{S}$$</div>
+                    <p><b>F</b> — сила давления, <b>S</b> — площадь опоры.</p>
+                </div>
+            </details>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Справочник Physica PRO.</p>
+    </footer>
+
+    <script>
+        // Тема
+        const themeBtn = document.getElementById('themeBtn');
+        function updateBtnIcon() {
+            themeBtn.innerText = document.documentElement.hasAttribute('data-theme') ? '☀️' : '🌙';
+        }
+        updateBtnIcon();
+
+        function toggleTheme() {
+            if (document.documentElement.hasAttribute('data-theme')) {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            updateBtnIcon();
+        }
+
+        // Локальный поиск (теперь привязан к formulaSearch)
+        const localSearch = document.getElementById('formulaSearch');
+        const cards = document.querySelectorAll('details');
+
+        localSearch.addEventListener('input', function() {
+            const val = this.value.toLowerCase();
+            cards.forEach(card => {
+                const name = card.getAttribute('data-name');
+                if (name.includes(val)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Если перешли с главной страницы через поиск
+        const urlParams = new URLSearchParams(window.location.search);
+        const findParam = urlParams.get('find');
+        
+        if (findParam) {
+            localSearch.value = findParam;
+            localSearch.dispatchEvent(new Event('input')); 
+            
+            cards.forEach(card => {
+                if (card.getAttribute('data-name') === findParam.toLowerCase()) {
+                    card.setAttribute('open', 'true');
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
